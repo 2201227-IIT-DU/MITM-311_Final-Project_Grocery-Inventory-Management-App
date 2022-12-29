@@ -1,6 +1,7 @@
 import cv2
 from pyzbar.pyzbar import decode
 import time
+from playsound import playsound
 
 cap = cv2.VideoCapture(0)
 cap.set(3, 1600)
@@ -13,6 +14,7 @@ while camera == True:
     success, frame = cap.read()
 
     for code in decode(frame):
+        # playsound('beep.mp3')
         scannedCode = code.data.decode('utf-8')
         if not scannedCode in DB:
             print(scannedCode)
