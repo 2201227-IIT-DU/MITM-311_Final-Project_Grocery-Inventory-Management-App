@@ -1,0 +1,380 @@
+#:import random random
+
+MDScreen:
+    MDNavigationLayout:
+        MDScreenManager:
+            id: login_screen_manager
+            
+            MyLoginScreen:
+                name:'login'
+
+            MyRegistrationScreen:
+                name: 'register'
+
+            MyForgotPasswordScreen:
+                name: 'forgot password'
+
+            MyPasswordRecoveryScreen:
+                name: 'password recovery'
+
+            MDScreen:
+                name:'signed in'
+                
+                MDBoxLayout:
+                    orientation:'vertical'
+
+                    MDTopAppBar:
+                        id: top_app_bar
+                        title: 'Welcome'
+                        md_bg_color: "#e7e4c0"
+                        specific_text_color: "#4a4939"
+                        left_action_items: [['menu', lambda x: nav_drawer.set_state('open')]]
+                        right_action_items: [['account-circle', lambda x: x]]
+                        elevation: 10
+
+                    MDScreenManager:
+                        id: screen_content_manager
+                        
+                        MDScreen:
+                            name:'scr 1'
+
+                            MDBoxLayout:
+                                orientation: 'vertical'
+                                MDLabel:
+                                    text: 'Top Sellers'
+                                    halign: 'center'
+                                    size_hint_y: None
+                                    height: 30
+
+                                MyShowcaseCarousel:
+                                    loop: True
+                                    size_hint_y: None
+                                    height: 200
+
+                                    Image:
+                                        source: 'logo.png'
+                                    
+                                    Image:
+                                        source: 'logo.png'
+                                    
+                                    Image:
+                                        source: 'logo.png'
+
+                                MDScrollView:
+                                    MDBoxLayout:
+                                        orientation: 'vertical'
+                                        size_hint_y: None
+
+                                        MDLabel:
+                                            text: 'this is scr 1'
+                                            halign: 'center'
+                                        MDLabel:
+                                            text: 'this is scr 1 x2'
+                                            halign: 'center'
+                                        MDLabel:
+                                            text: 'this is scr 1 x3'
+                                            halign: 'center'
+
+
+                                        
+                        MDScreen:
+                            name:'scr 2'
+                            MDLabel:
+                                text: 'this is scr 2'
+                                halign: 'center'
+        
+        MDNavigationDrawer:
+            id: nav_drawer
+            radius: (0, 16, 16, 0)
+
+            MDNavigationDrawerMenu:
+                
+                MDNavigationDrawerHeader:
+                    title: 'Shop Name'
+                    text: 'Address'
+                    spacing: 4
+                    title_color: '#4a4939'
+                    padding: 12, 0, 0, 56
+                    # source: "logo.png"
+                
+                MDNavigationDrawerLabel:
+                    text: "Mail"
+
+                MyDrawerClickableItem:
+                    icon: "gmail"
+                    right_text: "+99"
+                    text_right_color: "#4a4939"
+                    text: "Inbox"
+                    on_release:
+                        top_app_bar.title = 'Scr 1'
+                        screen_content_manager.current = 'scr 1'
+                        nav_drawer.set_state("close")
+
+                MyDrawerClickableItem:
+                    icon: "send"
+                    text: "Outbox"
+                    on_release:
+                        top_app_bar.title = 'Scr 2'
+                        screen_content_manager.current = 'scr 2'
+                        nav_drawer.set_state("close")
+
+                MyDrawerClickableItem:
+                    icon: "logout"
+                    text: "Sign out"
+                    on_release:
+                        nav_drawer.set_state("close")
+                        login_screen_manager.current = 'login'
+                        top_app_bar.title = 'Welcome'
+                        screen_content_manager.current = 'scr 1'
+
+
+                MDNavigationDrawerDivider:
+
+                MDNavigationDrawerLabel:
+                    text: "Labels"
+
+                MyDrawerLabelItem:
+                    icon: "information-outline"
+                    text: "Label"
+
+                MyDrawerLabelItem:
+                    icon: "information-outline"
+                    text: "Label"
+
+
+<MyDrawerClickableItem@MDNavigationDrawerItem>
+    focus_color: "#e7e4c0"
+    text_color: "#4a4939"
+    icon_color: "#4a4939"
+    ripple_color: "#c5bdd2"
+    selected_color: "#0c6c4d"
+
+
+<MyDrawerLabelItem@MDNavigationDrawerItem>
+    text_color: "#4a4939"
+    icon_color: "#4a4939"
+    focus_behavior: False
+    selected_color: "#4a4939"
+    _no_ripple_effect: True
+
+
+<MyFormCard@MDCard>:
+    orientation: 'vertical'
+    size_hint: None, None
+    size: 400, 800
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}            
+    elevation: 4
+    padding: 5, 25, 5, 10
+    spacing: 25
+
+
+<MyFormHeading@MDLabel>:
+    halign: 'center'
+    font_size: 40
+    size_hint_y: None
+    height: self.texture_size[1]
+    padding_y: 0
+
+
+<MyInputText@MDTextField>:
+    hint_text: 'Input Field'
+    icon_left: ''
+    
+    helper_text: ""
+    helper_text_mode: "on_focus"
+    
+    mode: "rectangle"
+    size_hint_x: None
+    width: 250
+    font_size: 18
+    pos_hint: {'center_x': .5}
+
+
+<MyInputPassword@MDTextField>:
+    hint_text: 'Password'
+    icon_left: 'key-variant'
+    helper_text: "at least 8 characters"
+    helper_text_mode: "on_focus"
+    password: True
+    mode: "rectangle"
+    size_hint_x: None
+    width: 250
+    font_size: 18
+    pos_hint: {'center_x': .5}
+
+
+<MyFormButton@MDFillRoundFlatIconButton>:
+    icon: ""
+    text: "Sample text"
+    pos_hint: {'center_x': .5}
+    size_hint_x: .625
+    font_size: 18
+    halign: 'left'
+
+
+<MyLoginScreen@MDScreen>
+    MyFormCard:
+        Image:
+            source: 'logo.png'
+            pos_hint: {'center_x': .5}
+            size_hint: None, None
+            size: '140dp', '140dp'
+
+        MyFormHeading:
+            text: 'Login'
+        
+        MyInputText:
+            id: user
+            hint_text: 'User ID'
+            icon_left: 'account'    
+            helper_text: "email or contact no"
+            
+        MyInputPassword:
+            id: password
+
+        MyFormButton:
+            icon: "login"
+            text: "Log in"
+            on_release:
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'signed in'
+
+        MyFormButton:
+            icon: "account-plus-outline"
+            text: "Register"
+            on_release:
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'register'
+
+        MyFormButton:
+            icon: "alert-circle-outline"
+            text: "Forgot Password"
+            on_release:
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'forgot password'
+
+
+        Widget:
+
+
+<MyRegistrationScreen@MDScreen>
+    MyFormCard:
+        Image:
+            source: 'logo.png'
+            pos_hint: {'center_x': .5}
+            size_hint: None, None
+            size: '140dp', '140dp'
+
+        MyFormHeading:
+            text: 'Sign Up'
+        
+        MyInputText:
+            id: user
+            hint_text: 'User ID'
+            icon_left: 'account'    
+            helper_text: "email or contact no"
+            
+        MyInputPassword:
+            id: password
+
+        MyFormButton:
+            icon: "account-plus-outline"
+            text: "Register"
+            on_release:
+                pass
+
+        MyFormButton:
+            icon: "login"
+            text: "Already Have Account"
+            on_release:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'login'
+
+        Widget:
+
+
+<MyForgotPasswordScreen@MDScreen>
+    MyFormCard:
+        Image:
+            source: 'logo.png'
+            pos_hint: {'center_x': .5}
+            size_hint: None, None
+            size: '140dp', '140dp'
+
+        MyFormHeading:
+            text: 'Forgot Password'
+        
+        MyInputText:
+            id: forgot_email
+            hint_text: 'Email'
+            icon_left: 'mail'    
+            helper_text: ""
+            
+        MyInputText:
+            id: forgot_phone
+            hint_text: 'Contact'
+            icon_left: 'phone'    
+            helper_text: ""
+
+        MyFormButton:
+            icon: "send"
+            text: "Verification Code"
+            on_release:
+                code = "%06d" % random.randint(10000,999999)
+                print(code)
+                verification.expected_text = code
+
+
+        MyFormButton:
+            icon: "keyboard-return"
+            text: "Go Back"
+            on_release:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'login'
+
+        MDSeparator:
+        
+        MyInputText:
+            id: verification
+            hint_text: 'Verification Code'
+            icon_left: 'key-variant'    
+            helper_text: "Check your email/phone inbox"
+            expected_text: None
+        
+        MyFormButton:
+            icon: "check-all"
+            text: "Verify"
+            on_release:
+                if verification.text == verification.expected_text: root.manager.transition.direction = 'left'; root.manager.current = 'password recovery'
+
+        Widget:
+
+
+<MyPasswordRecoveryScreen@MDScreen>
+    MyFormCard:
+        Image:
+            source: 'logo.png'
+            pos_hint: {'center_x': .5}
+            size_hint: None, None
+            size: '140dp', '140dp'
+
+        MyFormHeading:
+            text: 'Password Recovery'
+        
+        MyInputPassword:
+            hint_text: 'New password'
+
+        MyInputPassword:
+            hint_text: 'Confirm password'
+
+        MyFormButton:
+            icon: "check"
+            text: "Update Password"
+            on_release:
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'login'
+        
+        Widget:
+
+
+<MyShowcaseCarousel@MDCarousel>:
