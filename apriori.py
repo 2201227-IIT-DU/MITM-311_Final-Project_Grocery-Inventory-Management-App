@@ -15,40 +15,47 @@ data = {
         'T900' : ['I1','I2','I3']
 }
 
-minimumSupport = 2 # selection of this item has to occur at least this many times
+class AprioriAlgorithm:
+    def __init__(self, maxIter = 3, minSupport=2):
+        self.maxIter = maxIter
+        self.minSupport = minSupport
 
-def support_counter(itemList, transactions, maxIter = 3, iter=1):
+    def operate(self, itemList, transactions):
+        self.support_counter(itemList, transactions, 1)
 
-    supportCount = {}
-    for items in itemList:
-        temp = items if type(items) == list else [items]
+    def support_counter(self, itemList, transactions, iter):
 
-        key = ",".join(temp)
-        if not key in supportCount:
-                supportCount[key] = 0
+        supportCount = {}
+        for items in itemList:
+            temp = items if type(items) == list else [items]
+
+            key = ",".join(temp)
+            if not key in supportCount:
+                    supportCount[key] = 0
+            
+            for tran in transactions:
+                if all(i in data[tran] for i in temp):
+                    supportCount[key] += 1
+
+            if supportCount[key] < self.minSupport:
+                del supportCount[key]
+
+        if(self.maxIter == iter or not supportCount): return
+
+        print(supportCount)
+
+        filteredItemList = []
+        for i in list(supportCount.keys()):
+            for j in i.split(','):
+                if not j in filteredItemList:
+                    filteredItemList.append(j)
+
+        combinedItemList = []
         
-        for tran in transactions:
-            if all(i in data[tran] for i in temp):
-                supportCount[key] += 1
-
-        if supportCount[key] < minimumSupport:
-            del supportCount[key]
-
-    print(supportCount)
-
-    if(maxIter == iter or not supportCount): return
-
-    filteredItemList = []
-    for i in list(supportCount.keys()):
-        for j in i.split(','):
-            if not j in filteredItemList:
-                filteredItemList.append(j)
-
-    combinedItemList = []
-    
-    for item in itertools.combinations(filteredItemList, iter+1):
-        combinedItemList.append(list(item))
-    support_counter(combinedItemList, transactions, maxIter, iter+1)
+        for item in itertools.combinations(filteredItemList, iter+1):
+            combinedItemList.append(list(item))
+        self.support_counter(combinedItemList, transactions, iter+1)
 
 
-support_counter(I, T)
+apriori = AprioriAlgorithm(5, 3)
+apriori.operate(I, T)
