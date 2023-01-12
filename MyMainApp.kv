@@ -1,4 +1,5 @@
 #:import random random
+#:import ZBarCam kivy_garden.zbarcam.ZBarCam
 
 MDScreen:
     MDNavigationLayout:
@@ -26,8 +27,6 @@ MDScreen:
                     MDTopAppBar:
                         id: top_app_bar
                         title: 'Welcome'
-                        md_bg_color: "#e7e4c0"
-                        specific_text_color: "#4a4939"
                         left_action_items: [['menu', lambda x: nav_drawer.set_state('open')]]
                         right_action_items: [['account-circle', lambda x: x]]
                         elevation: 10
@@ -36,7 +35,7 @@ MDScreen:
                         id: screen_content_manager
                         
                         MDScreen:
-                            name:'scr 1'
+                            name:'dashboard'
 
                             MDBoxLayout:
                                 orientation: 'vertical'
@@ -46,42 +45,82 @@ MDScreen:
                                     size_hint_y: None
                                     height: 30
 
+                                MDSeparator:
+
                                 MyShowcaseCarousel:
                                     loop: True
                                     size_hint_y: None
-                                    height: 200
+                                    height: 350
+                                    on_parent: self.auto_rotate()
 
-                                    Image:
-                                        source: 'logo.png'
-                                    
-                                    Image:
-                                        source: 'logo.png'
-                                    
-                                    Image:
-                                        source: 'logo.png'
+                
+
+                                MDSeparator:
 
                                 MDScrollView:
-                                    MDBoxLayout:
-                                        orientation: 'vertical'
-                                        size_hint_y: None
-
-                                        MDLabel:
-                                            text: 'this is scr 1'
-                                            halign: 'center'
-                                        MDLabel:
-                                            text: 'this is scr 1 x2'
-                                            halign: 'center'
-                                        MDLabel:
-                                            text: 'this is scr 1 x3'
-                                            halign: 'center'
-
+                                    MDList:
+                                        id: dashboard_list
+                                        padding: 0,0,5,0
+                                        TwoLineAvatarListItem:
+                                            text: "Two-line item with avatar"
+                                            secondary_text: "Secondary text here"
+                                            ImageLeftWidget:
+                                                source: "logo.png"
 
                                         
                         MDScreen:
-                            name:'scr 2'
-                            MDLabel:
-                                text: 'this is scr 2'
-                                halign: 'center'
+                            name:'inventory'
+                            MDScrollView:
+                                size_hint_x: 1
+                                MDList:
+                                    id: inventory_list
+                                    padding: 10, 10, 10, 10
+                                    spacing: 20
+                        
+                        MyProductDetailScreen:
+                            name: 'product details'
+
+                        MDScreen:
+                            name: 'cart'
+                            MDBoxLayout:
+                                orientation: 'vertical'
+                                spacing: 10
+                                
+                                Image:
+                                    size_hint: None, None
+                                    size: 200, 200
+                                    pos_hint: {'center_x':0.5}
+                                    source: 'placeholder.png'
+
+                                MyInputText:
+                                    hint_text: 'Product ID'
+                                    icon_left: 'playlist-plus'
+                                    
+                                MDLabel:
+                                    text: 'Invalid'
+                                    halign: 'center'
+                                    size_hint: 1, None
+                                    height: 40
+
+                                MDSeparator:
+
+                                MDScrollView:
+                                    MDList:
+                                        id: cart_list
+                                        ThreeLineAvatarIconListItem:
+                                            text: "Three-line item with avatar"
+                                            secondary_text: "Secondary text here"
+                                            tertiary_text: "fit more text than usual"
+                                            
+                                            ImageLeftWidget:
+                                                source: "logo.png"
+                                            CounterContainer:
+                                                MDIconButton:
+                                                    icon: "minus"
+                                                MDIconButton:
+                                                    icon: "plus"
+                                            
+                                    
         
         MDNavigationDrawer:
             id: nav_drawer
@@ -98,56 +137,73 @@ MDScreen:
                     # source: "logo.png"
                 
                 MDNavigationDrawerLabel:
-                    text: "Mail"
+                    text: "Menu"
 
                 MyDrawerClickableItem:
-                    icon: "gmail"
-                    right_text: "+99"
+                    icon: "view-dashboard"
                     text_right_color: "#4a4939"
-                    text: "Inbox"
+                    text: "Dashboard"
                     on_release:
-                        top_app_bar.title = 'Scr 1'
-                        screen_content_manager.current = 'scr 1'
+                        top_app_bar.title = 'Dashboard'
+                        screen_content_manager.current = 'dashboard'
                         nav_drawer.set_state("close")
 
                 MyDrawerClickableItem:
-                    icon: "send"
-                    text: "Outbox"
+                    icon: "server"
+                    text: "Inventory"
                     on_release:
-                        top_app_bar.title = 'Scr 2'
-                        screen_content_manager.current = 'scr 2'
+                        top_app_bar.title = 'My Inventory'
+                        screen_content_manager.current = 'inventory'
+                        nav_drawer.set_state("close")
+
+                MyDrawerClickableItem:
+                    icon: "plus"
+                    text: "New Product"
+                    on_release:
+                        top_app_bar.title = 'New Product'
+                        screen_content_manager.current = 'product details'
+                        nav_drawer.set_state("close")
+
+                MyDrawerClickableItem:
+                    icon: "cart"
+                    text: "Cart"
+                    on_release:
+                        top_app_bar.title = 'Retail Cart'
+                        screen_content_manager.current = 'cart'
                         nav_drawer.set_state("close")
 
                 MyDrawerClickableItem:
                     icon: "logout"
                     text: "Sign out"
+                    selected_color: self.text_color
                     on_release:
                         nav_drawer.set_state("close")
                         login_screen_manager.current = 'login'
                         top_app_bar.title = 'Welcome'
-                        screen_content_manager.current = 'scr 1'
+                        screen_content_manager.current = 'dashboard'
+                        
 
 
                 MDNavigationDrawerDivider:
 
-                MDNavigationDrawerLabel:
-                    text: "Labels"
+                # MDNavigationDrawerLabel:
+                #     text: "Labels"
 
-                MyDrawerLabelItem:
-                    icon: "information-outline"
-                    text: "Label"
+                # MyDrawerLabelItem:
+                #     icon: "information-outline"
+                #     text: "Label"
 
-                MyDrawerLabelItem:
-                    icon: "information-outline"
-                    text: "Label"
+                # MyDrawerLabelItem:
+                #     icon: "information-outline"
+                #     text: "Label"
 
 
 <MyDrawerClickableItem@MDNavigationDrawerItem>
-    focus_color: "#e7e4c0"
-    text_color: "#4a4939"
-    icon_color: "#4a4939"
-    ripple_color: "#c5bdd2"
-    selected_color: "#0c6c4d"
+    focus_color: "#154c79"
+    text_color: "#eeeee4"
+    icon_color: "#eeeee4"
+    ripple_color: "#1e81b0"
+    selected_color: "#76b5c5"
 
 
 <MyDrawerLabelItem@MDNavigationDrawerItem>
@@ -161,10 +217,10 @@ MDScreen:
 <MyFormCard@MDCard>:
     orientation: 'vertical'
     size_hint: None, None
-    size: 400, 800
+    size: 400, 900
     pos_hint: {'center_x': 0.5, 'center_y': 0.5}            
     elevation: 4
-    padding: 5, 25, 5, 10
+    padding: 5, 15, 5, 10
     spacing: 25
 
 
@@ -259,6 +315,7 @@ MDScreen:
 
 <MyRegistrationScreen@MDScreen>
     MyFormCard:
+        spacing: 15
         Image:
             source: 'logo.png'
             pos_hint: {'center_x': .5}
@@ -269,13 +326,37 @@ MDScreen:
             text: 'Sign Up'
         
         MyInputText:
-            id: user
-            hint_text: 'User ID'
-            icon_left: 'account'    
-            helper_text: "email or contact no"
-            
+            id: reg_shop_name
+            hint_text: 'Shop Name'
+            icon_left: 'store'
+
+        MyInputText:
+            id: reg_shop_address
+            hint_text: 'Shop Address'
+            icon_left: 'map-marker'
+            multiline: True
+
+        MyInputText:
+            id: reg_phone
+            hint_text: 'Shop Contact'
+            icon_left: 'phone'
+
+        MyInputText:
+            id: reg_owner_name
+            hint_text: "Owner's Name"
+            icon_left: 'account'
+        
+        MyInputText:
+            id: reg_email
+            hint_text: "Email"
+            icon_left: 'email-outline'
+
         MyInputPassword:
             id: password
+
+        MyInputPassword:
+            id: password
+            hint_text: 'Confirm Password'
 
         MyFormButton:
             icon: "account-plus-outline"
@@ -307,7 +388,7 @@ MDScreen:
         MyInputText:
             id: forgot_email
             hint_text: 'Email'
-            icon_left: 'mail'    
+            icon_left: 'email'    
             helper_text: ""
             
         MyInputText:
@@ -377,4 +458,51 @@ MDScreen:
         Widget:
 
 
-<MyShowcaseCarousel@MDCarousel>:
+<MyProductDetailScreen@MDScreen>:
+    MyFormCard:
+        size: 400, 800
+        spacing: 17
+
+        Image:
+            size_hint: None, None
+            pos_hint: {'center_x': 0.5}
+            size: 225, 225
+            source: 'logo.png'
+
+        MyInputText:
+            id: forgot_phone
+            hint_text: 'Contact'
+            icon_left: 'phone'    
+            helper_text: ""
+        MyInputText:
+            id: forgot_phone
+            hint_text: 'Contact'
+            icon_left: 'phone'    
+            helper_text: ""
+        MyInputText:
+            id: forgot_phone
+            hint_text: 'Contact'
+            icon_left: 'phone'    
+            helper_text: ""
+        MyInputText:
+            id: forgot_phone
+            hint_text: 'Contact'
+            icon_left: 'phone'    
+            helper_text: ""
+        MyInputText:
+            id: forgot_phone
+            hint_text: 'Contact'
+            icon_left: 'phone'    
+            helper_text: ""
+
+        MyInputText:
+            id: forgot_phone
+            hint_text: 'Contact'
+            icon_left: 'phone'    
+            helper_text: ""
+    
+        MyFormButton:
+            on_release:
+                # Code to get form data
+                app.update_db({'field-1': 1, 'field-2': 2, 'field-3': 3})
+        Widget:
